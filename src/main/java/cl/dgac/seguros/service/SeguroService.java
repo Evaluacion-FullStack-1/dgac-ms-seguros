@@ -17,14 +17,16 @@ public class SeguroService {
 
     private final SeguroRepository seguroRepository;
     private final SeguroMapper seguroMapper;
-    private final WebClient.Builder webClientBuilder;
+    
+    // Inyectamos el WebClient configurado directamente
+    private final WebClient webClientDrones;
 
     public SeguroService(SeguroRepository seguroRepository,
                          SeguroMapper seguroMapper,
-                         WebClient.Builder webClientBuilder) {
+                         WebClient webClientDrones) {
         this.seguroRepository = seguroRepository;
         this.seguroMapper = seguroMapper;
-        this.webClientBuilder = webClientBuilder;
+        this.webClientDrones = webClientDrones;
     }
 
     public List<SeguroResponseDTO> listarSeguros() {
@@ -101,9 +103,10 @@ public class SeguroService {
     }
 
     public String consultarMicroservicioDrones() {
-        return webClientBuilder.build()
+        // Utilizamos el WebClient con la ruta relativa, sin localhost
+        return webClientDrones
                 .get()
-                .uri("http://localhost:8083/api/drones")
+                .uri("/api/drones")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

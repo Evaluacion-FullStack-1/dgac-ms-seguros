@@ -4,6 +4,8 @@ import cl.dgac.seguros.dto.SeguroRequestDTO;
 import cl.dgac.seguros.dto.SeguroResponseDTO;
 import cl.dgac.seguros.service.SeguroService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,7 +44,22 @@ public class SeguroController {
         return ResponseEntity.ok(seguroService.buscarPorId(id));
     }
 
-    @Operation(summary = "Registrar nueva póliza de seguro", description = "Ingresa los datos de una nueva póliza de responsabilidad civil u otros seguros asociados a la operación de drones.")
+    @Operation(
+            summary = "Registrar nueva póliza de seguro", 
+            description = "Ingresa los datos de una nueva póliza de responsabilidad civil u otros seguros asociados a la operación de drones.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Estructura de datos para registrar una nueva póliza de seguro",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "Ejemplo de Registro de Seguro",
+                                    summary = "JSON de prueba para póliza vigente",
+                                    value = "{\n  \"numeroPoliza\": \"POL-2026-99482\",\n  \"aseguradora\": \"Mapfre Seguros Chile\",\n  \"montoCobertura\": 250000.00,\n  \"fechaInicio\": \"2026-01-01\",\n  \"fechaFin\": \"2027-01-01\",\n  \"droneId\": 14,\n  \"empresaId\": 8,\n  \"estado\": \"VIGENTE\"\n}"
+                            )
+                    )
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Póliza registrada exitosamente"),
             @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos (ej. número de póliza duplicado)")
@@ -55,7 +72,22 @@ public class SeguroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(seguroCreado);
     }
 
-    @Operation(summary = "Actualizar datos de la póliza", description = "Modifica los detalles, montos de cobertura, fechas de vigencia o el estado de una póliza existente.")
+    @Operation(
+            summary = "Actualizar datos de la póliza", 
+            description = "Modifica los detalles, montos de cobertura, fechas de vigencia o el estado de una póliza existente.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Estructura de datos para actualizar la póliza de seguro",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "Ejemplo de Actualización de Seguro",
+                                    summary = "JSON de prueba para renovación o cambio de estado",
+                                    value = "{\n  \"numeroPoliza\": \"POL-2026-99482\",\n  \"aseguradora\": \"Mapfre Seguros Chile\",\n  \"montoCobertura\": 300000.00,\n  \"fechaInicio\": \"2026-01-01\",\n  \"fechaFin\": \"2027-06-01\",\n  \"droneId\": 14,\n  \"empresaId\": 8,\n  \"estado\": \"RENOVADA\"\n}"
+                            )
+                    )
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Seguro actualizado exitosamente"),
             @ApiResponse(responseCode = "404", description = "Seguro no encontrado"),
