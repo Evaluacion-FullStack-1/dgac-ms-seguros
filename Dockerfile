@@ -7,7 +7,7 @@ RUN mvn clean package -DskipTests
 # Etapa 2: Ejecución
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-# Archivo jar específico para Empresas Proveedoras
-COPY --from=build /app/target/dgac-ms-empresas-proveedoras-0.0.1-SNAPSHOT.jar app.jar
+# Archivo jar específico para Seguros
+COPY --from=build /app/target/dgac-ms-seguros-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.jar"]
